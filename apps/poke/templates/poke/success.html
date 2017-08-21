@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Pokes</title>
+        {% load static %}
+        <!-- The line above tells Django to be ready to listen for static files -->
+        <link rel="stylesheet" href="{% static 'poke/css/style.css' %}" media="screen" title="no title" charset="utf-8">
+        <!-- Put the static files in the static folder inside your app.  Django collects files within all static folders and puts them within a single folder -->
+    </head>
+    <body>
+        <div class=wrapper>
+            <div class=header>    
+                <h2>Welcome, {{ user_name }}! </h2>
+                <h2>{{num_pokers}} people poked you!</h2>
+            </div>
+            <a class=logout href="{% url 'logout' %}">Log Out</button></a>
+            <div class=history>
+                {% for poke in poke_list %}
+                    <p>{{poke.createdPoke.name}} poked you</p>
+                {% endfor %}
+            </div>
+        </div>
+        <div class=middle>
+            <h2> Users you may want to poke: </h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Alias</th>
+                        <th>Email</th>
+                        <th>Poke History</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in user_list %}
+                    <tr>
+                        <td>{{user.name}}</td>
+                        <td>{{user.alias}}</td>
+                        <td>{{user.email}}</td>
+                        <td>{{user.poke_time}}</td>
+                        <td>
+                            <form action = "{% url 'pokes' %}" method = "post">
+                                {%csrf_token%}
+                                <input type = "hidden" name = "poker_name" value = {{user.name}}>
+                                <input type = "submit" value = "Poke!">
+                            </form>
+                        </td>
+                    </tr>    
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>
